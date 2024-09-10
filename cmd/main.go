@@ -14,7 +14,7 @@ func main() {
 	db.SetupDB()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/hello", handlers.HelloHandler)
-	mux.HandleFunc("/users/", usersHandler) // Register handler for /users/ (note the trailing slash)
+	mux.HandleFunc("/users/", usersHandler) 
 
 	logger.Log.Info().Msg("Server starting at :8080")
 	http.ListenAndServe(":8080", mux)
@@ -22,24 +22,25 @@ func main() {
 
 // usersHandler differentiates between HTTP methods for /users and /users/{userId}
 func usersHandler(w http.ResponseWriter, r *http.Request) {
-	// Extract the path and determine if this is a request for /users or /users/{userId}
 	path := strings.TrimPrefix(r.URL.Path, "/users/")
 
-	// If the path is empty, it means it's a request to /users
 	if path == "" || path == "/" {
 		switch r.Method {
 		case http.MethodPost:
-			handlers.AddUser(w, r) // Call AddUser if method is POST
+			handlers.AddUser(w, r) 
 		case http.MethodGet:
-			handlers.GetAllUsers(w, r) // Call GetAllUsers if method is GET
+			handlers.GetAllUsers(w, r) 
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	} else {
-		// If the path is not empty, it's a request for /users/{userId}
 		switch r.Method {
 		case http.MethodGet:
-			handlers.GetUserById(w, r) // Call GetUserById to get a user by ID
+			handlers.GetUserById(w, r) 
+		case http.MethodPut:
+			handlers.UpdateUser(w, r) 
+		case http.MethodDelete:
+			handlers.DeleteUser(w, r) 
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
