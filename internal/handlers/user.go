@@ -11,7 +11,7 @@ import (
 )
 
 type User struct {
-    ID    int64  `json:"id"`
+    ID    int64  `bun:",pk,autoincrement" json:"id,omitempty"`
     Name  string `json:"name"`
     Email string `json:"email"`
 }
@@ -61,7 +61,7 @@ func GetAllUsers(w http.ResponseWriter,r *http.Request){
 	err := db.DB.NewSelect().Model(&users).Scan(r.Context())
 
 	if err != nil {
-		logger.Log.Error().Err(err).Msg("Failed t fetch user")
+		logger.Log.Error().Err(err).Msg("Failed to fetch user")
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
