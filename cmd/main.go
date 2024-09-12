@@ -12,6 +12,7 @@ func main() {
 	logger.SetupLogger()
 	db.SetupDB()
 	mux := http.NewServeMux()
+	routes.ProductRoutes(mux)
 	routes.UserRoutes(mux)
 
 	logger.Log.Info().Msg("Server starting at :8080")
